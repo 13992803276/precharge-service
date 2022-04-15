@@ -1,6 +1,5 @@
 package com.tw.precharge.service;
 
-import com.tw.precharge.constant.UserStatus;
 import com.tw.precharge.dto.ChargeDto;
 import com.tw.precharge.dto.ResultStatus;
 import com.tw.precharge.entity.Chargement;
