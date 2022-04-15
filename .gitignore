@@ -1,4 +1,4 @@
-Read.md
+READ.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

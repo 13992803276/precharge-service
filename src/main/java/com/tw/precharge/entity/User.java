@@ -14,8 +14,10 @@ import java.time.LocalDate;
 public class User {
     private Integer id;
     private String name;
+    private String account;
     private String phone;
     private String address;
-    private BigDecimal balance;
+    private BigDecimal  balance;
     private LocalDate created;
+    private String status;
 }
