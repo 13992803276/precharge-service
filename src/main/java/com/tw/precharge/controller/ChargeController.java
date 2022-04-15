@@ -31,6 +31,6 @@ public class ChargeController {
     @PostMapping("/{cid}/charge/{rid}/confirmation/")
     public Result<ChargeDto> chargeConfirmation(@RequestBody ChargeDto chargeDto, @PathVariable String cid,
                                                 @PathVariable String rid) {
-        return Result.ok(chargeService.chargeConfirmation(chargeDto));
+        return Result.ok(chargeService.chargeConfirmation(chargeDto, cid, rid));
     }
 }

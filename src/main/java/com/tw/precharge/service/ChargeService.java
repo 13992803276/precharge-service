@@ -45,7 +45,9 @@ public class ChargeService {
         }
     }
 
-    public ChargeDto chargeConfirmation(ChargeDto chargeDto) {
+    public ChargeDto chargeConfirmation(ChargeDto chargeDto, String cid, String rid) {
+        //校验参数
+        log.info("ChargeDto = {} , cid = {} , rid = {}", chargeDto, cid, rid);
         return chargeDto;
     }
 }
