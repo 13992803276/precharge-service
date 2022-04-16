@@ -4,6 +4,7 @@ import com.tw.precharge.dto.ChargeDto;
 import com.tw.precharge.dto.ResultStatus;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.User;
+import com.tw.precharge.repository.ChargementRepository;
 import com.tw.precharge.repository.UserRepository;
 import com.tw.precharge.util.UserUtil;
 import com.tw.precharge.util.exception.BusinessException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 
 /**
@@ -25,7 +27,9 @@ public class ChargeService {
     @Autowired
     UserRepository userRepository;
 
-    public String charge(ChargeDto dto, String cid, Integer userId) {
+    @Autowired
+    ChargementRepository chargementRepository;
+    public Chargement charge(ChargeDto dto, String cid, Integer userId) {
         //1 校验用户状态是否正确
         User user = UserUtil.getUserById(userId).orElse(null);
         //User user = userRepository.getById(userId);
@@ -46,7 +50,7 @@ public class ChargeService {
                     .createdBy("思沃租房平台")
                     .createdDate(LocalDate.now()).build();
             //保存数据库
-            return chargement.getObject();
+            return chargement;
         } else {
             throw new BusinessException(ResultStatus.USER_ERROR);
         }
@@ -56,5 +60,9 @@ public class ChargeService {
         //校验参数
         log.info("ChargeDto = {} , cid = {} , rid = {}", chargeDto, cid, rid);
         return chargeDto;
+    }
+
+    public List<Chargement> charge(Integer cid){
+        return chargementRepository.getChargementByCid(cid);
     }
 }
