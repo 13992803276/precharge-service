@@ -4,7 +4,7 @@ import com.tw.precharge.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author lexu
@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    User getUserById(Integer userId);
+    Optional<User> getUserById(Integer userId);
 
 }
