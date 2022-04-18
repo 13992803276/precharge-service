@@ -42,7 +42,7 @@ public class ChargeServiceImpl implements ChargeService {
 
     @Override
     public Chargement charge(ChargeDTO dto, String cid, Integer userId) {
-        if (new BigDecimal(dto.getAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0){
+        if (new BigDecimal(dto.getAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
             throw new BusinessException(ResultStatus.PARAM_ERROR);
         }
         //1 校验用户状态是否正确
@@ -74,7 +74,7 @@ public class ChargeServiceImpl implements ChargeService {
     @Override
     public String chargeConfirmation(String cid, String rid) {
         Chargement chargementById = chargementRepository.getChargementById(Integer.parseInt(rid));
-        if (chargementById != null){
+        if (chargementById != null) {
             WeChatPayResDTO resDTO = WeChatPayResDTO.builder()
                     .wechatId(chargementById.getPayerId())
                     .rid(rid)
@@ -94,11 +94,11 @@ public class ChargeServiceImpl implements ChargeService {
 
     @Override
     public Refundment refund(RefundDTO refundDTO, String cid, Integer userId) {
-        if (new BigDecimal(refundDTO.getRefundAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0){
+        if (new BigDecimal(refundDTO.getRefundAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
             throw new BusinessException(ResultStatus.PARAM_ERROR);
         }
         User user = userRepository.getUserById(userId).orElse(null);
-        if (user != null){
+        if (user != null) {
             Refundment refundment = Refundment.builder()
                     .cid(Integer.parseInt(cid))
                     .refundAmount(new BigDecimal(refundDTO.getRefundAmount()))
@@ -117,8 +117,9 @@ public class ChargeServiceImpl implements ChargeService {
     @Override
     public String refundConfirmation(String cid, String rid) {
         Refundment refundmentById = refundmentRepository.getRefundmentById(Integer.parseInt(rid));
-        if(refundmentById !=null){
+        if (refundmentById != null) {
             //写入消息队列
+            //TODO
             //更新数据库
             refundmentById.setStatus(RefundStatus.REFUNDING.getCode());
             refundmentRepository.save(refundmentById);

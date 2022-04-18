@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping( "/precharge_contract")
-@Api(tags = "充值业务接口")
+@Api(tags = "预充值合约业务接口")
 public class ChargeController {
 
     private final ChargeService chargeService;
