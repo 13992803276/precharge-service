@@ -9,8 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public  enum UserStatus {
-    NORMAL("0"),
-    FREEZE("1");
+    NORMAL("0"), FREEZE("1");
     private final String code;
 
     public String getCode() {

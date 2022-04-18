@@ -15,4 +15,5 @@ public interface WechatPayClient {
 
     @PostMapping(value = "/v1/weChat/charge")
     WechatPayDTO charge(@RequestBody WeChatPayResDTO weChatPayResDTO);
+
 }

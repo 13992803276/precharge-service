@@ -1,7 +1,9 @@
 package com.tw.precharge.service;
 
 import com.tw.precharge.dto.ChargeDTO;
+import com.tw.precharge.dto.RefundDTO;
 import com.tw.precharge.entity.Chargement;
+import com.tw.precharge.entity.Refundment;
 
 import java.util.List;
 
@@ -15,4 +17,10 @@ public interface ChargeService {
     String chargeConfirmation(String cid, String rid);
 
     List<Chargement> charge(Integer cid);
+
+    Refundment refund(RefundDTO refundDTO, String cid, Integer userId);
+
+    String refundConfirmation(String cid, String rid);
+
+    List<Refundment> refund(Integer cid);
 }

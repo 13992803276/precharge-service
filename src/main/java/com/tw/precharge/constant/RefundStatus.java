@@ -6,10 +6,9 @@ import lombok.Getter;
 /**
  * @author lexu
  */
-@Getter
 @AllArgsConstructor
-public enum PayStatus {
-    STAY_PAY("0"), PAYING("1"), PAID("2");
+@Getter
+public enum RefundStatus {
+    STAY_REFUND("0"), REFUNDING("1"), REFUNDED("2");
     private final String code;
-
 }

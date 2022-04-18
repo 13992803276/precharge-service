@@ -7,13 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -44,4 +40,6 @@ public class Refundment {
     private String refundType;
     @ApiModelProperty(value = "退款账号")
     private String refundAccount;
+    @ApiModelProperty(value = "退款状态")
+    private String status;
 }

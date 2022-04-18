@@ -1,8 +1,10 @@
 package com.tw.precharge.controller;
 
 import com.tw.precharge.dto.ChargeDTO;
+import com.tw.precharge.dto.RefundDTO;
 import com.tw.precharge.dto.Result;
 import com.tw.precharge.entity.Chargement;
+import com.tw.precharge.entity.Refundment;
 import com.tw.precharge.service.ChargeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,9 +40,8 @@ public class ChargeController {
     }
 
     @ApiOperation("创建充值确认接口")
-    @PostMapping("/{cid}/charge/{rid}/confirmation/")
-    public Result<String> chargeConfirmation(@RequestBody ChargeDTO chargeDto, @PathVariable String cid,
-                                                @PathVariable String rid) {
+    @PostMapping("/{cid}/charge/{rid}/confirmation")
+    public Result<String> chargeConfirmation( @PathVariable String cid, @PathVariable String rid) {
         return Result.ok(chargeService.chargeConfirmation(cid, rid));
     }
 
@@ -50,4 +51,24 @@ public class ChargeController {
     public Result<List<Chargement>> charge(@PathVariable String cid){
         return Result.ok(chargeService.charge(Integer.parseInt(cid)));
     }
+
+    @ApiOperation("创建退款请求接口")
+    @PostMapping("/{cid}/refund")
+    public Result<Refundment> refund(@RequestBody RefundDTO refundDTO, @PathVariable(name = "cid") String cid) {
+        Integer userId = 1;
+        return Result.ok(chargeService.refund(refundDTO,cid,userId));
+    }
+
+    @ApiOperation("创建退款确认接口")
+    @PostMapping("/{cid}/refund/{rid}/confirmation")
+    public Result<String> refundConfirmation( @PathVariable String cid,@PathVariable String rid) {
+        return Result.ok(chargeService.refundConfirmation(cid, rid));
+    }
+    @ApiOperation(value = "充值请求查询接口", notes = "通过合同Id查询当前合同下的充值所有请求", httpMethod = "GET")
+    @ApiImplicitParam(value = "cid:合同Id" ,required = true, dataType = "String" ,paramType = "query")
+    @GetMapping("/precharge_contract/{cid}/refund")
+    public Result<List<Refundment>> refund(@PathVariable String cid){
+        return Result.ok(chargeService.refund(Integer.parseInt(cid)));
+    }
+
 }
