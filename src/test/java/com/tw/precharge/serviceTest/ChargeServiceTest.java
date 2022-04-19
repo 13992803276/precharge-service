@@ -61,10 +61,5 @@ public class ChargeServiceTest {
         when(userRepository.getUserById(1)).thenReturn(Optional.ofNullable(getUser()));
         Chargement chargement = chargeServiceimpl.charge(chargeDTO, "12", 1);
         Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
     }
 }
