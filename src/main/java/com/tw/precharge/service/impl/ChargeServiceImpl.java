@@ -10,6 +10,7 @@ import com.tw.precharge.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
 import com.tw.precharge.entity.User;
+import com.tw.precharge.kafka.KafkaSender;
 import com.tw.precharge.repository.ChargementRepository;
 import com.tw.precharge.repository.RefundmentRepository;
 import com.tw.precharge.repository.UserRepository;
@@ -32,13 +33,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChargeServiceImpl implements ChargeService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final ChargementRepository chargementRepository;
+    private final RefundmentRepository refundmentRepository;
+    private final WechatPayClient wechatPayClient;
 
-    ChargementRepository chargementRepository;
-
-    RefundmentRepository refundmentRepository;
-
-    WechatPayClient wechatPayClient;
+    KafkaSender kafkaSender;
 
     @Override
     public Chargement charge(ChargeDTO dto, String cid, Integer userId) {
@@ -59,6 +59,7 @@ public class ChargeServiceImpl implements ChargeService {
                     .chargeType("wechat")
                     .chargeAccount(dto.getWeChatId())
                     .payeeName("思沃租房平台")
+                    .chargeAccount(user.getAccount())
                     .payeeId("thoughtworks")
                     .createdBy("思沃租房平台")
                     .createdDate(LocalDate.now())
@@ -79,7 +80,7 @@ public class ChargeServiceImpl implements ChargeService {
                     .wechatId(chargementById.getPayerId())
                     .rid(rid)
                     .cid(cid).build();
-            WechatPayDTO charge = wechatPayClient.charge(resDTO);
+            WechatPayDTO charge = wechatPayClient.payment(resDTO);
             chargementById.setStatus(PayStatus.PAID.getCode());
             chargementRepository.save(chargementById);
             return charge.getMessage();
@@ -119,7 +120,7 @@ public class ChargeServiceImpl implements ChargeService {
         Refundment refundmentById = refundmentRepository.getRefundmentById(Integer.parseInt(rid));
         if (refundmentById != null) {
             //写入消息队列
-            //TODO
+            kafkaSender.send(refundmentById.toString());
             //更新数据库
             refundmentById.setStatus(RefundStatus.REFUNDING.getCode());
             refundmentRepository.save(refundmentById);

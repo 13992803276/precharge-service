@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * @author lexu
  */
-@FeignClient(name = "rwf-identity", configuration = FeignConfiguration.class, url = "https://weixin.com/pay-ment")
+@FeignClient(name = "wechat-payment-service", configuration = FeignConfiguration.class, url = "https://weixin.com/pay-ment")
 public interface WechatPayClient {
 
     @PostMapping(value = "/v1/weChat/charge")
-    WechatPayDTO charge(@RequestBody WeChatPayResDTO weChatPayResDTO);
+    WechatPayDTO payment(@RequestBody WeChatPayResDTO weChatPayResDTO);
 
 }

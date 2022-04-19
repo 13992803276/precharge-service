@@ -6,10 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -22,10 +25,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "用户退款请求模型", description = "退款请求详细信息实体类")
+@Table(name = "refundment")
 public class Refundment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "退款ID")
     private Integer id;
     @ApiModelProperty(value = "退款金额")
@@ -42,4 +46,7 @@ public class Refundment {
     private String refundAccount;
     @ApiModelProperty(value = "退款状态")
     private String status;
+
+    @CreatedDate
+    private LocalDate createdDate;
 }

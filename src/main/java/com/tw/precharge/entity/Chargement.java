@@ -6,10 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -22,10 +25,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "用户充值请求模型", description = "充值请求详细信息实体类")
+@Table(name = "chargement")
 public class Chargement {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "充值Id")
     private Integer id;
     @ApiModelProperty(value = "充值请求主题")
@@ -52,7 +56,9 @@ public class Chargement {
     private String status;
     @ApiModelProperty(value = "创建人")
     private String createdBy;
+
     @ApiModelProperty(value = "充值创建日期")
+    @CreatedDate
     private LocalDate createdDate;
 
     public String getObject(){
