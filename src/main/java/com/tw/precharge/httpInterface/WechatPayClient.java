@@ -1,4 +1,4 @@
-package com.tw.precharge.service;
+package com.tw.precharge.httpInterface;
 
 import com.tw.precharge.controller.configuration.FeignConfiguration;
 import com.tw.precharge.dto.WeChatPayResDTO;

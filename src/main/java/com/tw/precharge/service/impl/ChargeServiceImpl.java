@@ -10,12 +10,12 @@ import com.tw.precharge.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
 import com.tw.precharge.entity.User;
-import com.tw.precharge.kafka.KafkaSender;
+import com.tw.precharge.mq.kafka.KafkaSender;
 import com.tw.precharge.repository.ChargementRepository;
 import com.tw.precharge.repository.RefundmentRepository;
 import com.tw.precharge.repository.UserRepository;
 import com.tw.precharge.service.ChargeService;
-import com.tw.precharge.service.WechatPayClient;
+import com.tw.precharge.httpInterface.WechatPayClient;
 import com.tw.precharge.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +37,7 @@ public class ChargeServiceImpl implements ChargeService {
     private final ChargementRepository chargementRepository;
     private final RefundmentRepository refundmentRepository;
     private final WechatPayClient wechatPayClient;
-
-    KafkaSender kafkaSender;
+    private final KafkaSender kafkaSender;
 
     @Override
     public Chargement charge(ChargeDTO dto, String cid, Integer userId) {
@@ -108,6 +107,7 @@ public class ChargeServiceImpl implements ChargeService {
                     .refundedBy(user.getName())
                     .refundDate(LocalDate.now())
                     .status(RefundStatus.STAY_REFUND.getCode())
+                    .createdDate(LocalDate.now())
                     .build();
             refundmentRepository.save(refundment);
             return refundment;

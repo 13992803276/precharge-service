@@ -1,4 +1,4 @@
-package com.tw.precharge.kafka;
+package com.tw.precharge.mq.kafka;
 
 import lombok.Data;
 

@@ -47,7 +47,7 @@ public class ChargeController {
 
     @ApiOperation(value = "充值请求查询接口", notes = "通过合同Id查询当前合同下的充值所有请求", httpMethod = "GET")
     @ApiImplicitParam(value = "cid:合同Id" ,required = true, dataType = "String" ,paramType = "query")
-    @GetMapping("/precharge_contract/{cid}/charge")
+    @GetMapping("/{cid}/charge")
     public Result<List<Chargement>> charge(@PathVariable String cid){
         return Result.ok(chargeService.charge(Integer.parseInt(cid)));
     }
@@ -66,7 +66,7 @@ public class ChargeController {
     }
     @ApiOperation(value = "充值请求查询接口", notes = "通过合同Id查询当前合同下的充值所有请求", httpMethod = "GET")
     @ApiImplicitParam(value = "cid:合同Id" ,required = true, dataType = "String" ,paramType = "query")
-    @GetMapping("/precharge_contract/{cid}/refund")
+    @GetMapping("/{cid}/refund")
     public Result<List<Refundment>> refund(@PathVariable String cid){
         return Result.ok(chargeService.refund(Integer.parseInt(cid)));
     }
