@@ -1,7 +1,7 @@
 package com.tw.precharge.controller.advice;
 
-import com.tw.precharge.dto.Result;
-import com.tw.precharge.dto.ResultStatus;
+import com.tw.precharge.controller.dto.Result;
+import com.tw.precharge.controller.dto.ResultStatus;
 import com.tw.precharge.util.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

@@ -1,23 +1,24 @@
 package com.tw.precharge.serviceTest;
 
-import com.tw.precharge.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.ChargeDTO;
 import com.tw.precharge.entity.Chargement;
-import com.tw.precharge.entity.User;
-import com.tw.precharge.httpInterface.WechatPayClient;
-import com.tw.precharge.mq.kafka.KafkaSender;
-import com.tw.precharge.repository.ChargementRepository;
-import com.tw.precharge.repository.RefundmentRepository;
-import com.tw.precharge.repository.UserRepository;
+import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
+import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
+import com.tw.precharge.infrastructure.repository.ChargementRepository;
+import com.tw.precharge.infrastructure.repository.RefundmentRepository;
+import com.tw.precharge.infrastructure.repository.UserRepository;
 import com.tw.precharge.service.impl.ChargeServiceImpl;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class ChargeServiceTest {
@@ -39,8 +40,8 @@ public class ChargeServiceTest {
         chargeServiceimpl = new ChargeServiceImpl(userRepository,chargementRepository
                 ,refundmentRepository,wechatPayClient,kafkaSender);
     }
-    private User getUser(){
-        return User.builder()
+    private RentUser getUser(){
+        return RentUser.builder()
                 .id(1)
                 .name("徐乐")
                 .account("wuhen057")
@@ -58,8 +59,10 @@ public class ChargeServiceTest {
                 .amount("20.0")
                 .weChatId("wuhen057")
                 .build();
-        when(userRepository.getUserById(1)).thenReturn(Optional.ofNullable(getUser()));
-        Chargement chargement = chargeServiceimpl.charge(chargeDTO, "12", 1);
-        Assertions.assertEquals(chargement.getChargeAccount(), "20.0");
+        when(userRepository.getUserById(any())).thenReturn(Optional.ofNullable(getUser()));
+        Chargement chargement = chargeServiceimpl.charge(chargeDTO, "12", any());
+
+        Assertions.assertEquals(chargement.getChargeAmount(), new BigDecimal("20.0"));
+        Assertions.assertEquals(chargement.getChargeAccount(), "wuhen057");
     }
 }

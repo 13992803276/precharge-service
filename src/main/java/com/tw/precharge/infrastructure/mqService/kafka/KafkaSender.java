@@ -1,4 +1,4 @@
-package com.tw.precharge.mq.kafka;
+package com.tw.precharge.infrastructure.mqService.kafka;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

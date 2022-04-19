@@ -1,8 +1,8 @@
-package com.tw.precharge.httpInterface;
+package com.tw.precharge.infrastructure.httpInterface;
 
 import com.tw.precharge.controller.configuration.FeignConfiguration;
-import com.tw.precharge.dto.WeChatPayResDTO;
-import com.tw.precharge.dto.WechatPayDTO;
+import com.tw.precharge.controller.dto.WeChatPayResDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

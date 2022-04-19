@@ -1,7 +1,7 @@
 package com.tw.precharge.service;
 
-import com.tw.precharge.dto.ChargeDTO;
-import com.tw.precharge.dto.RefundDTO;
+import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.RefundDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
 

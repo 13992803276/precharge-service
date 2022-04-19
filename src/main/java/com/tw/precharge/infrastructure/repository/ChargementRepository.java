@@ -1,4 +1,4 @@
-package com.tw.precharge.repository;
+package com.tw.precharge.infrastructure.repository;
 
 import com.tw.precharge.entity.Chargement;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,20 +2,20 @@ package com.tw.precharge.service.impl;
 
 import com.tw.precharge.constant.PayStatus;
 import com.tw.precharge.constant.RefundStatus;
-import com.tw.precharge.dto.ChargeDTO;
-import com.tw.precharge.dto.RefundDTO;
-import com.tw.precharge.dto.ResultStatus;
-import com.tw.precharge.dto.WeChatPayResDTO;
-import com.tw.precharge.dto.WechatPayDTO;
+import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.RefundDTO;
+import com.tw.precharge.controller.dto.ResultStatus;
+import com.tw.precharge.controller.dto.WeChatPayResDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
-import com.tw.precharge.entity.User;
-import com.tw.precharge.mq.kafka.KafkaSender;
-import com.tw.precharge.repository.ChargementRepository;
-import com.tw.precharge.repository.RefundmentRepository;
-import com.tw.precharge.repository.UserRepository;
+import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
+import com.tw.precharge.infrastructure.repository.ChargementRepository;
+import com.tw.precharge.infrastructure.repository.RefundmentRepository;
+import com.tw.precharge.infrastructure.repository.UserRepository;
 import com.tw.precharge.service.ChargeService;
-import com.tw.precharge.httpInterface.WechatPayClient;
+import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import com.tw.precharge.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +39,15 @@ public class ChargeServiceImpl implements ChargeService {
     private final WechatPayClient wechatPayClient;
     private final KafkaSender kafkaSender;
 
+    private static final Integer RETRY_TIMES = 3;
+
     @Override
     public Chargement charge(ChargeDTO dto, String cid, Integer userId) {
         if (new BigDecimal(dto.getAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
             throw new BusinessException(ResultStatus.PARAM_ERROR);
         }
         //1 校验用户状态是否正确
-        User user = userRepository.getUserById(userId).orElse(null);
+        RentUser user = userRepository.getUserById(userId).orElse(null);
         if (user != null) {
             //保存数据库
             Chargement chargement = Chargement.builder()
@@ -78,13 +80,30 @@ public class ChargeServiceImpl implements ChargeService {
             WeChatPayResDTO resDTO = WeChatPayResDTO.builder()
                     .wechatId(chargementById.getPayerId())
                     .rid(rid)
-                    .cid(cid).build();
-            WechatPayDTO charge = wechatPayClient.payment(resDTO);
-            chargementById.setStatus(PayStatus.PAID.getCode());
-            chargementRepository.save(chargementById);
-            return charge.getMessage();
+                    .cid(cid)
+                    .build();
+            String codeTemp = cycleCharge(resDTO);
+            if(ResultStatus.SUCCESS.getCode().equals(codeTemp)){
+                chargementById.setStatus(PayStatus.PAID.getCode());
+                chargementRepository.save(chargementById);
+                return "success";
+            }else{
+                return "failed";
+            }
         }
         return "success";
+    }
+
+    private String cycleCharge(WeChatPayResDTO resDTO) {
+        String codeTemp = "400";
+        for (int i = 0; i < RETRY_TIMES; i++) {
+            WechatPayDTO charge = wechatPayClient.payment(resDTO);
+            if (ResultStatus.SUCCESS.getCode().equals(charge.getCode())) {
+                codeTemp = "200";
+                break;
+            }
+        }
+        return codeTemp;
     }
 
     @Override
@@ -97,7 +116,7 @@ public class ChargeServiceImpl implements ChargeService {
         if (new BigDecimal(refundDTO.getRefundAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
             throw new BusinessException(ResultStatus.PARAM_ERROR);
         }
-        User user = userRepository.getUserById(userId).orElse(null);
+        RentUser user = userRepository.getUserById(userId).orElse(null);
         if (user != null) {
             Refundment refundment = Refundment.builder()
                     .cid(Integer.parseInt(cid))

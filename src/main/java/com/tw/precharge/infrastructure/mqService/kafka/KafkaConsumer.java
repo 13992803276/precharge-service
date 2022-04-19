@@ -1,4 +1,4 @@
-package com.tw.precharge.mq.kafka;
+package com.tw.precharge.infrastructure.mqService.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
