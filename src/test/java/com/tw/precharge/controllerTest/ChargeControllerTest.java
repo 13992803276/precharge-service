@@ -3,14 +3,12 @@ package com.tw.precharge.controllerTest;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.tools.javac.util.List;
-import com.tw.precharge.PrechargeServiceApplication;
 import com.tw.precharge.constant.PayStatus;
-import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.dto.ChargeDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.service.ChargeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -36,9 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PrechargeServiceApplication.class)
 public class ChargeControllerTest {
 
     @Mock
@@ -46,6 +38,7 @@ public class ChargeControllerTest {
 
     @Autowired
     MockMvc mockMvc ;
+
     Chargement chargement = Chargement.builder()
             .cid(12)
             .title("思沃租房平台账户预充值")

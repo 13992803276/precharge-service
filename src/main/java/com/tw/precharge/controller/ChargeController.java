@@ -1,8 +1,8 @@
 package com.tw.precharge.controller;
 
-import com.tw.precharge.controller.dto.ChargeDTO;
-import com.tw.precharge.controller.dto.RefundDTO;
-import com.tw.precharge.controller.dto.Result;
+import com.tw.precharge.dto.ChargeDTO;
+import com.tw.precharge.dto.RefundDTO;
+import com.tw.precharge.dto.RespondEntity;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
 import com.tw.precharge.service.ChargeService;
@@ -34,41 +34,41 @@ public class ChargeController {
 
     @ApiOperation("创建充值请求接口")
     @PostMapping("/{cid}/charge")
-    public Result<Chargement> charge(@RequestBody ChargeDTO chargeDto, @PathVariable(name = "cid") String cid) {
+    public RespondEntity<Chargement> charge(@RequestBody ChargeDTO chargeDto, @PathVariable(name = "cid") String cid) {
         Integer userId = 1;
-        return Result.ok(chargeService.charge(chargeDto,cid,userId));
+        return RespondEntity.ok(chargeService.charge(chargeDto,cid,userId));
     }
 
     @ApiOperation("创建充值确认接口")
     @PostMapping("/{cid}/charge/{rid}/confirmation")
-    public Result<String> chargeConfirmation( @PathVariable String cid, @PathVariable String rid) {
-        return Result.ok(chargeService.chargeConfirmation(cid, rid));
+    public RespondEntity<String> chargeConfirmation(@PathVariable String cid, @PathVariable String rid) {
+        return RespondEntity.ok(chargeService.chargeConfirmation(cid, rid));
     }
 
     @ApiOperation(value = "充值请求查询接口", notes = "通过合同Id查询当前合同下的充值所有请求", httpMethod = "GET")
     @ApiImplicitParam(value = "cid:合同Id" ,required = true, dataType = "String" ,paramType = "query")
     @GetMapping("/{cid}/charge")
-    public Result<List<Chargement>> charge(@PathVariable String cid){
-        return Result.ok(chargeService.charge(Integer.parseInt(cid)));
+    public RespondEntity<List<Chargement>> charge(@PathVariable String cid){
+        return RespondEntity.ok(chargeService.charge(Integer.parseInt(cid)));
     }
 
     @ApiOperation("创建退款请求接口")
     @PostMapping("/{cid}/refund")
-    public Result<Refundment> refund(@RequestBody RefundDTO refundDTO, @PathVariable(name = "cid") String cid) {
+    public RespondEntity<Refundment> refund(@RequestBody RefundDTO refundDTO, @PathVariable(name = "cid") String cid) {
         Integer userId = 1;
-        return Result.ok(chargeService.refund(refundDTO,cid,userId));
+        return RespondEntity.ok(chargeService.refund(refundDTO,cid,userId));
     }
 
     @ApiOperation("创建退款确认接口")
     @PostMapping("/{cid}/refund/{rid}/confirmation")
-    public Result<String> refundConfirmation( @PathVariable String cid,@PathVariable String rid) {
-        return Result.ok(chargeService.refundConfirmation(cid, rid));
+    public RespondEntity<String> refundConfirmation(@PathVariable String cid, @PathVariable String rid) {
+        return RespondEntity.ok(chargeService.refundConfirmation(cid, rid));
     }
     @ApiOperation(value = "充值请求查询接口", notes = "通过合同Id查询当前合同下的充值所有请求", httpMethod = "GET")
     @ApiImplicitParam(value = "cid:合同Id" ,required = true, dataType = "String" ,paramType = "query")
     @GetMapping("/{cid}/refund")
-    public Result<List<Refundment>> refund(@PathVariable String cid){
-        return Result.ok(chargeService.refund(Integer.parseInt(cid)));
+    public RespondEntity<List<Refundment>> refund(@PathVariable String cid){
+        return RespondEntity.ok(chargeService.refund(Integer.parseInt(cid)));
     }
 
 }

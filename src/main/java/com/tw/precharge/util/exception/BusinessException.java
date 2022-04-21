@@ -1,18 +1,18 @@
 package com.tw.precharge.util.exception;
 
-import com.tw.precharge.controller.dto.ResultStatus;
+import com.tw.precharge.dto.RespondStatus;
 
 /**
  * @author lexu
  */
 public class BusinessException extends RuntimeException{
-    private final ResultStatus rs;
+    private final RespondStatus rs;
 
-    public BusinessException(ResultStatus rs) {
+    public BusinessException(RespondStatus rs) {
         this.rs = rs;
     }
 
-    public ResultStatus getRs() {
+    public RespondStatus getRs() {
         return rs;
     }
 }

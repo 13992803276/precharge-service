@@ -1,4 +1,4 @@
-package com.tw.precharge.controller.dto;
+package com.tw.precharge.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
