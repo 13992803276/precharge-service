@@ -10,7 +10,7 @@ import java.util.Optional;
  * @author lexu
  */
 @Repository
-public interface UserRepository extends JpaRepository<RentUser,Integer> {
+public interface RentUserRepository extends JpaRepository<RentUser,Integer> {
 
     Optional<RentUser> getUserById(Integer userId);
 

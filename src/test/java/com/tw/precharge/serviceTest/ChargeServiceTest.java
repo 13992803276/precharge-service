@@ -9,7 +9,7 @@ import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
 import com.tw.precharge.infrastructure.repository.RefundmentRepository;
-import com.tw.precharge.infrastructure.repository.UserRepository;
+import com.tw.precharge.infrastructure.repository.RentUserRepository;
 import com.tw.precharge.service.ChargeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 public class ChargeServiceTest {
 
-    private  UserRepository userRepository;
+    private RentUserRepository userRepository;
     private  ChargementRepository chargementRepository;
     private  RefundmentRepository refundmentRepository;
     private  WechatPayClient wechatPayClient;
@@ -35,7 +35,7 @@ public class ChargeServiceTest {
 
     @BeforeEach
     public void setup() {
-        userRepository = Mockito.mock(UserRepository.class);
+        userRepository = Mockito.mock(RentUserRepository.class);
         chargementRepository = Mockito.mock(ChargementRepository.class);
         refundmentRepository = Mockito.mock(RefundmentRepository.class);
         wechatPayClient = Mockito.mock(WechatPayClient.class);

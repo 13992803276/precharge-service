@@ -13,7 +13,7 @@ import com.tw.precharge.entity.RentUser;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
 import com.tw.precharge.infrastructure.repository.RefundmentRepository;
-import com.tw.precharge.infrastructure.repository.UserRepository;
+import com.tw.precharge.infrastructure.repository.RentUserRepository;
 import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import com.tw.precharge.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChargeService {
 
-    private final UserRepository userRepository;
+    private final RentUserRepository userRepository;
     private final ChargementRepository chargementRepository;
     private final RefundmentRepository refundmentRepository;
     private final WechatPayClient wechatPayClient;
