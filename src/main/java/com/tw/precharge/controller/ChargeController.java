@@ -9,8 +9,8 @@ import com.tw.precharge.service.ChargeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,12 +25,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping( "/precharge_contract")
 @Api(tags = "预充值合约业务接口")
 public class ChargeController {
 
-    private final ChargeService chargeService;
+    @Autowired
+    ChargeService chargeService;
 
     @ApiOperation("创建充值请求接口")
     @PostMapping("/{cid}/charge")

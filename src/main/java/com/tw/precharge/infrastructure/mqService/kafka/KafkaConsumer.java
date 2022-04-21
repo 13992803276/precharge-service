@@ -19,7 +19,6 @@ public class KafkaConsumer {
                 .ifPresent(message -> {
                     log.info("【+++++++++++++++++ record = {} 】", record);
                     log.info("【+++++++++++++++++ message = {}】", message);
-                   //解析退款申请Id并更新退款状态
                 });
     }
 

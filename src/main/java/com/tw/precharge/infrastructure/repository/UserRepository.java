@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<RentUser,Integer> {
 
     Optional<RentUser> getUserById(Integer userId);
 
+    Optional<RentUser> getRentUserByAccount(String account);
+
 }

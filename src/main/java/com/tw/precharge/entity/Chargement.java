@@ -61,6 +61,7 @@ public class Chargement {
     @CreatedDate
     private LocalDate createdDate;
 
+
     public String getObject(){
         return "您有一条待支付请求需要支付，请您在" + this.payLimit +
                 "小时之内通过" + this.chargeType  + "进行支付。\n" +
