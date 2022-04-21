@@ -26,6 +26,7 @@ http://localhost:8080/swagger-ui.html
 ```
 
 ### Build database dev
+database is created using mysql,build process as fellows:
 ```
 docker run --name rent-room -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:latest
 
@@ -114,6 +115,7 @@ Repository test are build with H2 database
 The class 'KafkaConsumer' is the 3rd system service, 
 so it will not actually be implemented in this class
 and don't have test for it in this project.
+
 
 
 
