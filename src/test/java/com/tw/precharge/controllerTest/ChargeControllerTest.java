@@ -82,7 +82,7 @@ public class ChargeControllerTest {
     }
 
     @Test
-    public void test_charge_with_get() throws Exception {
+    public void test_charge_with_get_request() throws Exception {
         Mockito.when(chargeService.charge(anyInt())).thenReturn(List.of(chargement));
         MockHttpServletResponse response = mockMvc.perform(get("http://localhost:8080/precharge_contract/12/charge")
                         .param("cid","12"))

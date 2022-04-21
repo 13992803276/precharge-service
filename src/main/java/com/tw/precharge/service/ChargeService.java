@@ -31,7 +31,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ChargeService  {
+public class ChargeService {
 
     private final UserRepository userRepository;
     private final ChargementRepository chargementRepository;
@@ -39,16 +39,19 @@ public class ChargeService  {
     private final WechatPayClient wechatPayClient;
     private final KafkaSender kafkaSender;
 
+    /**
+     *
+      wechatPay retry times
+     */
     private static final Integer RETRY_TIMES = 3;
 
     public Chargement charge(ChargeDTO dto, String cid, Integer userId) {
         if (new BigDecimal(dto.getAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
             throw new BusinessException(ResultStatus.PARAM_ERROR);
         }
-        //1 校验用户状态是否正确
+        //1 check user
         RentUser user = userRepository.getUserById(userId).orElse(null);
         if (user != null) {
-            //保存数据库
             Chargement chargement = Chargement.builder()
                     .cid(Integer.parseInt(cid))
                     .title("思沃租房平台账户预充值")
@@ -70,6 +73,7 @@ public class ChargeService  {
             throw new BusinessException(ResultStatus.USER_ERROR);
         }
     }
+
     @Transactional(rollbackOn = Exception.class)
     public String chargeConfirmation(String cid, String rid) {
         Chargement chargementById = chargementRepository.getChargementById(Integer.parseInt(rid));
@@ -78,23 +82,24 @@ public class ChargeService  {
                     .wechatId(chargementById.getPayerId())
                     .amount(chargementById.getChargeAmount().toString())
                     .build();
+            //retry 3 times for get wechatPay status
             String codeTemp = cycleCharge(resDTO);
             if (ResultStatus.SUCCESS.getCode().equals(codeTemp)) {
                 chargementById.setStatus(PayStatus.PAID.getCode());
                 chargementRepository.save(chargementById);
-                updateUserBalance(chargementById.getChargeAccount(),chargementById.getChargeAmount());
-                return "success";
+                updateUserBalance(chargementById.getChargeAccount(), chargementById.getChargeAmount());
+                return ResultStatus.SUCCESS.getMessage();
             }
         }
-        return "failed";
+        return ResultStatus.PARAM_ERROR.getMessage();
     }
 
     private String cycleCharge(WeChatPayResDTO resDTO) {
-        String codeTemp = "400";
+        String codeTemp = ResultStatus.PARAM_ERROR.getCode();
         for (int i = 0; i < RETRY_TIMES; i++) {
             WechatPayDTO charge = wechatPayClient.payment(resDTO);
             if (ResultStatus.SUCCESS.getCode().equals(charge.getCode())) {
-                codeTemp = "200";
+                codeTemp = ResultStatus.SUCCESS.getCode();
                 break;
             }
         }
@@ -104,7 +109,6 @@ public class ChargeService  {
     public List<Chargement> charge(Integer cid) {
         return chargementRepository.getChargementByCid(cid);
     }
-
 
     public Refundment refund(RefundDTO refundDTO, String cid, Integer userId) {
         if (new BigDecimal(refundDTO.getRefundAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
@@ -136,20 +140,20 @@ public class ChargeService  {
                     .amount(refundmentById.getRefundAmount().toString())
                     .build();
             WechatPayDTO wechatRefund = wechatPayClient.refund(weChatPayResDTO);
-            if (wechatRefund.getCode().equals(ResultStatus.SUCCESS.getCode())){
-                //1.更新退款请求状态为"已退款"。
+            if (wechatRefund.getCode().equals(ResultStatus.SUCCESS.getCode())) {
+                //1.update refundment status is 'refunded'。
                 refundmentById.setStatus(RefundStatus.REFUNDED.getCode());
-                //2。更新账户余额
+                //2. update user's balance
                 this.updateUserBalance(refundmentById.getRefundAccount(), refundmentById.getRefundAmount());
-            }else{
-                //写入消息队列
+            } else {
+                //1.write Mq for refundment when wechatPay unsuccessful
                 kafkaSender.send(refundmentById.toString());
-                //更新退款状态数据库
+                //2.update refund status is 'refunding'
                 refundmentById.setStatus(RefundStatus.REFUNDING.getCode());
             }
             refundmentRepository.save(refundmentById);
         }
-        return "success";
+        return ResultStatus.SUCCESS.getMessage();
     }
 
     public List<Refundment> refund(Integer cid) {

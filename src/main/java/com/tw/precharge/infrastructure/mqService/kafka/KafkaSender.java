@@ -22,7 +22,7 @@ public class KafkaSender {
 
     private Gson gson = new GsonBuilder().create();
 
-    public void send(String msg) {
+    public String send(String msg) {
         Message message = new Message();
 
         message.setId(System.currentTimeMillis());
@@ -31,6 +31,7 @@ public class KafkaSender {
         log.info("【++++++++++++++++++ message ：{}】", gson.toJson(message));
         //对 topic =  refund 的发送消息
         kafkaTemplate.send("refund",gson.toJson(message));
+        return message.getMsg();
     }
 
 }

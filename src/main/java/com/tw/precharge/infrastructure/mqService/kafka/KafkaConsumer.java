@@ -21,5 +21,4 @@ public class KafkaConsumer {
                     log.info("【+++++++++++++++++ message = {}】", message);
                 });
     }
-
 }

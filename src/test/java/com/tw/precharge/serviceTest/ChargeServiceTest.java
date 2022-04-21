@@ -1,6 +1,8 @@
 package com.tw.precharge.serviceTest;
 
+import com.tw.precharge.constant.PayStatus;
 import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.RentUser;
 import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class ChargeServiceTest {
@@ -64,5 +67,36 @@ public class ChargeServiceTest {
 
         Assertions.assertEquals(chargement.getChargeAmount(), new BigDecimal("20.0"));
         Assertions.assertEquals(chargement.getChargeAccount(), "wuhen057");
+    }
+
+    @Test
+    public void given_user_is_active_and_amount_should_charge_confirm_surely(){
+        Chargement chargement = Chargement.builder()
+                .cid(1)
+                .title("思沃租房平台账户预充值")
+                .payLimit(0.5f)
+                .chargeAmount(new BigDecimal("100"))
+                .payerName("xule")
+                .payerId("wuhen057")
+                .chargeType("wechat")
+                .chargeAccount("wuhen057")
+                .payeeName("思沃租房平台")
+                .payeeId("thoughtworks")
+                .createdBy("思沃租房平台")
+                .createdDate(LocalDate.now())
+                .status(PayStatus.STAY_PAY.getCode())
+                .build();
+        WechatPayDTO wechatPayDTO = WechatPayDTO.builder()
+                .code("200")
+                .message("success")
+                .data("37488372nie2ekf994")
+                .build();
+        when(chargementRepository.getChargementById(any())).thenReturn(chargement);
+        when(wechatPayClient.payment(any())).thenReturn(wechatPayDTO);
+        when(chargementRepository.save(any())).thenReturn(null);
+        when(userRepository.getRentUserByAccount(anyString())).thenReturn(Optional.ofNullable(getUser()));
+        when(userRepository.save(any())).thenReturn(null);
+        String result = chargeService.chargeConfirmation("12", "1");
+        Assertions.assertEquals(result, "success");
     }
 }
