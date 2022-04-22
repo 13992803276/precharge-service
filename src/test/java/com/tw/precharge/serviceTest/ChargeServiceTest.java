@@ -1,10 +1,10 @@
 package com.tw.precharge.serviceTest;
 
 import com.tw.precharge.constant.PayStatus;
-import com.tw.precharge.dto.ChargeDTO;
-import com.tw.precharge.dto.WechatPayDTO;
+import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
-import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.domain.user.RentUser;
 import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
@@ -51,7 +51,7 @@ public class ChargeServiceTest {
                 .address("xian")
                 .balance(new BigDecimal(0))
                 .phone("13992809270")
-                .status("1")
+                .status("0")
                 .created(LocalDate.now())
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.tw.precharge.dto;
+package com.tw.precharge.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

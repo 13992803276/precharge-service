@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.tools.javac.util.List;
 import com.tw.precharge.constant.PayStatus;
-import com.tw.precharge.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.ChargeDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.service.ChargeService;
 import org.junit.jupiter.api.Assertions;

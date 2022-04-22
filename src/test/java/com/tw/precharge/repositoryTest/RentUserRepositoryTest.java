@@ -1,6 +1,6 @@
 package com.tw.precharge.repositoryTest;
 
-import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.domain.user.RentUser;
 import com.tw.precharge.infrastructure.repository.RentUserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

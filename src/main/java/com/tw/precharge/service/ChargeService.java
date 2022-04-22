@@ -2,14 +2,15 @@ package com.tw.precharge.service;
 
 import com.tw.precharge.constant.PayStatus;
 import com.tw.precharge.constant.RefundStatus;
-import com.tw.precharge.dto.ChargeDTO;
-import com.tw.precharge.dto.RefundDTO;
-import com.tw.precharge.dto.RespondStatus;
-import com.tw.precharge.dto.WeChatPayResDTO;
-import com.tw.precharge.dto.WechatPayDTO;
+import com.tw.precharge.constant.UserStatus;
+import com.tw.precharge.controller.dto.ChargeDTO;
+import com.tw.precharge.controller.dto.RefundDTO;
+import com.tw.precharge.controller.dto.RespondStatus;
+import com.tw.precharge.controller.dto.WeChatPayResDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
-import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.domain.user.RentUser;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
 import com.tw.precharge.infrastructure.repository.RefundmentRepository;
@@ -77,7 +78,9 @@ public class ChargeService {
     @Transactional(rollbackOn = Exception.class)
     public String chargeConfirmation(String cid, String rid) {
         Chargement chargementById = chargementRepository.getChargementById(Integer.parseInt(rid));
+        //check user status ac2
         if (chargementById != null) {
+            checkUserStatus(chargementById.getChargeAccount());
             WeChatPayResDTO resDTO = WeChatPayResDTO.builder()
                     .wechatId(chargementById.getPayerId())
                     .amount(chargementById.getChargeAmount().toString())
@@ -92,6 +95,13 @@ public class ChargeService {
             }
         }
         return RespondStatus.PARAM_ERROR.getMessage();
+    }
+
+    private void checkUserStatus(String userAccount) {
+        RentUser user = userRepository.getRentUserByAccount(userAccount).get();
+        if (user.getStatus().equals(UserStatus.FREEZE.getCode())){
+            throw new  BusinessException(RespondStatus.USER_ERROR);
+        }
     }
 
     private String cycleCharge(WeChatPayResDTO resDTO) {
@@ -111,11 +121,11 @@ public class ChargeService {
     }
 
     public Refundment refund(RefundDTO refundDTO, String cid, Integer userId) {
-        if (new BigDecimal(refundDTO.getRefundAmount()).compareTo(BigDecimal.valueOf(0.0)) < 0) {
-            throw new BusinessException(RespondStatus.PARAM_ERROR);
-        }
         RentUser user = userRepository.getUserById(userId).orElse(null);
         if (user != null) {
+            if(user.getBalance().compareTo(new BigDecimal(refundDTO.getRefundAmount())) <0 ){
+                throw new BusinessException(RespondStatus.PARAM_ERROR);
+            }
             Refundment refundment = Refundment.builder()
                     .cid(Integer.parseInt(cid))
                     .refundAmount(new BigDecimal(refundDTO.getRefundAmount()))

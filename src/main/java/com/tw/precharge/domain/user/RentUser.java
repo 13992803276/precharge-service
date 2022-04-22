@@ -1,4 +1,4 @@
-package com.tw.precharge.entity;
+package com.tw.precharge.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

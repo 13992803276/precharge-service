@@ -1,6 +1,6 @@
 package com.tw.precharge.util.exception;
 
-import com.tw.precharge.dto.RespondStatus;
+import com.tw.precharge.controller.dto.RespondStatus;
 
 /**
  * @author lexu

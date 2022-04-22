@@ -1,7 +1,7 @@
 package com.tw.precharge.httpInterfaceTest;
 
-import com.tw.precharge.dto.WeChatPayResDTO;
-import com.tw.precharge.dto.WechatPayDTO;
+import com.tw.precharge.controller.dto.WeChatPayResDTO;
+import com.tw.precharge.controller.dto.WechatPayDTO;
 import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

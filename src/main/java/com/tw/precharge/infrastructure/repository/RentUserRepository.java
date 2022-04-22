@@ -1,6 +1,6 @@
 package com.tw.precharge.infrastructure.repository;
 
-import com.tw.precharge.entity.RentUser;
+import com.tw.precharge.domain.user.RentUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
