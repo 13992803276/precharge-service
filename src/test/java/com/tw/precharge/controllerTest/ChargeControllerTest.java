@@ -2,7 +2,6 @@ package com.tw.precharge.controllerTest;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.tools.javac.util.List;
 import com.tw.precharge.constant.PayStatus;
 import com.tw.precharge.controller.dto.ChargeDTO;
 import com.tw.precharge.entity.Chargement;
@@ -10,11 +9,11 @@ import com.tw.precharge.service.ChargeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -36,8 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 public class ChargeControllerTest {
 
-    @Mock
-    ChargeService chargeService = Mockito.mock(ChargeService.class);
+    @MockBean
+    ChargeService chargeService;
 
     @Autowired
     MockMvc mockMvc ;
@@ -73,13 +73,13 @@ public class ChargeControllerTest {
                 .getResponse();
         //验证controller 获取到的对象是否和service层返回的对象一致。
         String str = response.getContentAsString(StandardCharsets.UTF_8);
-        Chargement chargement1 = JSON.parseObject(JSON.parseObject(str).getJSONArray("data").get(0).toString(), Chargement.class);
+        Chargement chargement1 = JSON.parseObject(JSON.parseObject(str).getJSONObject("data").toString(), Chargement.class);
         Assertions.assertEquals(chargement.getChargeAmount(), chargement1.getChargeAmount());
     }
 
     @Test
     public void test_charge_with_get_request() throws Exception {
-        Mockito.when(chargeService.charge(anyInt())).thenReturn(List.of(chargement));
+        Mockito.when(chargeService.charge(anyInt())).thenReturn(Arrays.asList(chargement));
         MockHttpServletResponse response = mockMvc.perform(get("http://localhost:8080/precharge_contract/12/charge")
                         .param("cid","12"))
                 .andExpect(status().isOk())

@@ -30,7 +30,7 @@ public class KafkaSender {
         message.setSendTime(LocalDate.now());
         log.info("【++++++++++++++++++ message ：{}】", gson.toJson(message));
         //对 topic =  refund 的发送消息
-        kafkaTemplate.send("refund",gson.toJson(message));
+        kafkaTemplate.send("refund", gson.toJson(message));
         return message.getMsg();
     }
 
