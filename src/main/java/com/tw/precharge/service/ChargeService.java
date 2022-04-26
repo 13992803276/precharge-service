@@ -8,14 +8,14 @@ import com.tw.precharge.controller.dto.RefundDTO;
 import com.tw.precharge.controller.dto.RespondStatus;
 import com.tw.precharge.controller.dto.WeChatPayResDTO;
 import com.tw.precharge.controller.dto.WechatPayDTO;
+import com.tw.precharge.domain.user.RentUser;
 import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.entity.Refundment;
-import com.tw.precharge.domain.user.RentUser;
+import com.tw.precharge.infrastructure.httpInterface.WechatService;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
 import com.tw.precharge.infrastructure.repository.RefundmentRepository;
 import com.tw.precharge.infrastructure.repository.RentUserRepository;
-import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
 import com.tw.precharge.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class ChargeService {
     private final RentUserRepository userRepository;
     private final ChargementRepository chargementRepository;
     private final RefundmentRepository refundmentRepository;
-    private final WechatPayClient wechatPayClient;
+    private final WechatService wechatService;
     private final KafkaSender kafkaSender;
 
     /**
@@ -107,7 +107,7 @@ public class ChargeService {
     private String cycleCharge(WeChatPayResDTO resDTO) {
         String codeTemp = RespondStatus.PARAM_ERROR.getCode();
         for (int i = 0; i < RETRY_TIMES; i++) {
-            WechatPayDTO charge = wechatPayClient.payment(resDTO);
+            WechatPayDTO charge = wechatService.payment(resDTO);
             if (RespondStatus.SUCCESS.getCode().equals(charge.getCode())) {
                 codeTemp = RespondStatus.SUCCESS.getCode();
                 break;
@@ -149,7 +149,7 @@ public class ChargeService {
                     .wechatId(refundmentById.getRefundAccount())
                     .amount(refundmentById.getRefundAmount().toString())
                     .build();
-            WechatPayDTO wechatRefund = wechatPayClient.refund(weChatPayResDTO);
+            WechatPayDTO wechatRefund = wechatService.refund(weChatPayResDTO);
             if (wechatRefund.getCode().equals(RespondStatus.SUCCESS.getCode())) {
                 //1.update refundment status is 'refunded'。
                 refundmentById.setStatus(RefundStatus.REFUNDED.getCode());

@@ -62,7 +62,6 @@ public class ChargeControllerTest {
         ChargeDTO chargeDTO = ChargeDTO.builder().weChatId("wuhen000").amount("100,0").build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(chargeDTO);
-
         Mockito.when(chargeService.charge(any(),anyString(),anyInt())).thenReturn(chargement);
         MockHttpServletResponse response = mockMvc.perform(post("http://localhost:8080/precharge_contract/12/charge")
                         .content(json)
@@ -73,8 +72,8 @@ public class ChargeControllerTest {
                 .getResponse();
         //验证controller 获取到的对象是否和service层返回的对象一致。
         String str = response.getContentAsString(StandardCharsets.UTF_8);
-        Chargement chargement1 = JSON.parseObject(JSON.parseObject(str).getJSONObject("data").toString(), Chargement.class);
-        Assertions.assertEquals(chargement.getChargeAmount(), chargement1.getChargeAmount());
+        Chargement chargementRes = JSON.parseObject(JSON.parseObject(str).getJSONObject("data").toString(), Chargement.class);
+        Assertions.assertEquals(chargement.getChargeAmount(), chargementRes.getChargeAmount());
     }
 
     @Test

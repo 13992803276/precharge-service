@@ -3,9 +3,9 @@ package com.tw.precharge.serviceTest;
 import com.tw.precharge.constant.PayStatus;
 import com.tw.precharge.controller.dto.ChargeDTO;
 import com.tw.precharge.controller.dto.WechatPayDTO;
-import com.tw.precharge.entity.Chargement;
 import com.tw.precharge.domain.user.RentUser;
-import com.tw.precharge.infrastructure.httpInterface.WechatPayClient;
+import com.tw.precharge.entity.Chargement;
+import com.tw.precharge.infrastructure.httpInterface.WechatService;
 import com.tw.precharge.infrastructure.mqService.kafka.KafkaSender;
 import com.tw.precharge.infrastructure.repository.ChargementRepository;
 import com.tw.precharge.infrastructure.repository.RefundmentRepository;
@@ -29,7 +29,7 @@ public class ChargeServiceTest {
     private RentUserRepository userRepository;
     private  ChargementRepository chargementRepository;
     private  RefundmentRepository refundmentRepository;
-    private  WechatPayClient wechatPayClient;
+    private WechatService wechatService;
     private  KafkaSender kafkaSender;
     private ChargeService chargeService;
 
@@ -38,10 +38,10 @@ public class ChargeServiceTest {
         userRepository = Mockito.mock(RentUserRepository.class);
         chargementRepository = Mockito.mock(ChargementRepository.class);
         refundmentRepository = Mockito.mock(RefundmentRepository.class);
-        wechatPayClient = Mockito.mock(WechatPayClient.class);
+        wechatService = Mockito.mock(WechatService.class);
         kafkaSender = Mockito.mock(KafkaSender.class);
         chargeService = new ChargeService(userRepository,chargementRepository
-                ,refundmentRepository,wechatPayClient,kafkaSender);
+                ,refundmentRepository,wechatService,kafkaSender);
     }
     private RentUser getUser(){
         return RentUser.builder()
@@ -92,7 +92,7 @@ public class ChargeServiceTest {
                 .data("37488372nie2ekf994")
                 .build();
         when(chargementRepository.getChargementById(any())).thenReturn(chargement);
-        when(wechatPayClient.payment(any())).thenReturn(wechatPayDTO);
+        when(wechatService.payment(any())).thenReturn(wechatPayDTO);
         when(chargementRepository.save(any())).thenReturn(null);
         when(userRepository.getRentUserByAccount(anyString())).thenReturn(Optional.ofNullable(getUser()));
         when(userRepository.save(any())).thenReturn(null);

@@ -109,12 +109,15 @@ Repository test are build with H2 database
 3.creat RentUserRepositoryTest for testing RentUserRepository's getRentUserById() and save() method;
 
     RentUserRepositoryTest must be creat with a '@SpringbootTest' annotation
+###Code struct
+
 
 ### Comment
 
 The class 'KafkaConsumer' is the 3rd system service, 
 so it will not actually be implemented in this class
 and don't have test for it in this project.
+
 
 
 
