@@ -40,6 +40,4 @@ public class RentUserRepositoryTest {
         Assertions.assertEquals(saveUser.getName(), "张三丰");
         Assertions.assertEquals(saveUser.getAccount(), "zhangsanfeng");
     }
-
-
 }
