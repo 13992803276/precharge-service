@@ -25,5 +25,4 @@ import java.util.concurrent.TimeUnit;
                 .connectionPool(new ConnectionPool())
                 .build();
     }
-
 }
