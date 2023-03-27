@@ -15,15 +15,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 @ConditionalOnClass(Feign.class)
-@AutoConfigureBefore(FeignAutoConfiguration.class)public class FeignConfiguration {
+@AutoConfigureBefore(FeignAutoConfiguration.class)
+public class FeignConfiguration {
     @Bean
-    public okhttp3.OkHttpClient okHttpClient(){
-        return new okhttp3.OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(120, TimeUnit.SECONDS)
-                .connectionPool(new ConnectionPool())
-                .build();
+    public okhttp3.OkHttpClient okHttpClient() {
+        return new okhttp3.OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).connectTimeout(60, TimeUnit.SECONDS).writeTimeout(120, TimeUnit.SECONDS).connectionPool(new ConnectionPool()).build();
     }
 
 }
