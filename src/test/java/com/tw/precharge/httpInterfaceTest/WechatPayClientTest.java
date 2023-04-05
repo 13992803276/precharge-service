@@ -33,7 +33,7 @@ public class WechatPayClientTest {
     ArgumentCaptor<WeChatPayResDTO> argumentCaptor = ArgumentCaptor.forClass(WeChatPayResDTO.class);
 
     @Test
-    void test_wechat_client_should_return_successful_result(){
+    void test_wechat_client_should_return_successful_result() {
         WechatPayDTO wechatPayDTO = WechatPayDTO.builder()
                 .code("200")
                 .message("success")
@@ -41,16 +41,16 @@ public class WechatPayClientTest {
                 .build();
         Mockito.when(wechatPayClient.payment(any())).thenReturn(wechatPayDTO);
         WechatPayDTO payment = wechatService.payment(weChatPayResDTO);
-        Assertions.assertEquals(payment.getCode(),"200");
-        Assertions.assertEquals(payment.getMessage(),"success");
-        Assertions.assertEquals(payment.getData(),"37488372nie2ekf994");
+        Assertions.assertEquals(payment.getCode(), "200");
+        Assertions.assertEquals(payment.getMessage(), "success");
+        Assertions.assertEquals(payment.getData(), "37488372nie2ekf994");
     }
 
     @Test
-    void test_wechat_client_should_get_pram_success(){
+    void test_wechat_client_should_get_pram_success() {
         wechatService.payment(weChatPayResDTO);
         verify(wechatPayClient, times(1)).payment(argumentCaptor.capture());
-        Assertions.assertEquals(argumentCaptor.getValue().getWechatId(),"wuhen057");
-        Assertions.assertEquals(argumentCaptor.getValue().getAmount(),"100");
+        Assertions.assertEquals(argumentCaptor.getValue().getWechatId(), "wuhen057");
+        Assertions.assertEquals(argumentCaptor.getValue().getAmount(), "100");
     }
 }
