@@ -171,7 +171,7 @@ public class ChargeService {
     }
 
     private void updateUserBalance(String userAccount, BigDecimal amount) {
-        RentUser user = userRepository.getRentUserByAccount(userAccount).get();
+        RentUser user = userRepository.getRentUserByAccount(userAccount).orElse(new RentUser());
         user.setBalance(user.getBalance().subtract(amount));
         userRepository.save(user);
     }
